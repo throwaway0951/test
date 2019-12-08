@@ -1,6 +1,10 @@
 import requests
 from bs4 import BeautifulSoup as bs
 
+#bleeding edge 
+#not working
+#rand it and time sleep need updation
+#@crustypotato
 class co:
     r='\033[31m' #red
     g='\033[32m' #green
