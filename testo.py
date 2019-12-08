@@ -1,56 +1,77 @@
 
 #This will not run on online IDE
+#@CrustyPotato
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as bs
 import os,sys
 import time
-import platform
+from fake_useragent import UserAgent
+import random
 
 class co:
     r='\033[31m' #red
     g='\033[32m' #green
     o='\033[33m' #orange
-    b='\033[34m' #blue
+    bl='\033[34m' #blue
     p='\033[35m' #purple
     c='\033[36m' #cyan
     y='\033[93m' #yellow
-    p='\033[95m' #pink
+    pi='\033[95m' #pink
     e= '\033[0m' #END
     b= '\033[1m' #BOLD
+    u= '\033[4m' #underline
+
+ua=UserAgent()
+hdr = {'User-Agent': ua.random,
+      'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+      'Accept-Encoding': 'none',
+      'Accept-Language': 'en-US,en;q=0.8',
+      'Connection': 'keep-alive'}
 
 class testo():
     def ver(self):
-        print ""
+        print (co.b + co.g + "----->         Made by @CrustyPotato      <-----")
         time.sleep(0.1)
-        print co.b + co.g + "----->         Made by @CrustyPotato      <-----"
+        print (co.y + "----->             Version: 1.0           <-----")
         time.sleep(0.1)
-        print co.y + "----->             Version: 1.0           <-----"
-        time.sleep(0.1)
-        print co.y + "----->     #1 tool for Background Search  <-----"
+        print (co.y + "----->     #1 tool for Background Search  <-----")
         time.sleep(0.3)
-    def options(self):
-        #print co.b + co.o ("Enter 1 for whitepages >>UNDER DEVELOPMEMT<<")
-        #print co.b + co.o ("Enter 2 for beenverified")
-        main = raw_input("Enter your choice: ")
-        if main == "1":
-            print co.r + co.b + 'Be sure to use hyphen(-) enetering name'
-            time.sleep(0.4)
-            print ('Be sure to type slash(/) after every input') + co.e
-            name = raw_input("Enter the first & last name | example: james-charles/: ")
-            state = raw_input("Enter State | example: ca,pa,tx/: ")
-            city = raw_input("Enter City | example: los-angeles/: ")
-            URL = 'https://www.beenverified.com/people/'+ name + state +city
-            r = requests.get(URL)
-            soup = BeautifulSoup(r.content, 'html5lib')
-            a= soup.find('title')
-            print (a.string)
-            div = soup.find('div', id='results')
-            print (div.string)
-        elif main == "2":
-            print ("UNDER DEVELOPMEMT")
-        else:
-            print ("CHECK YOUR INPUT")
+def clear_text(text):
+    if "\n" in text:
+        text = text.replace("\n", '')
+    if "\xa0" in text:
+        text = text.replace("\xa0", "")
+    return text
+
+print(co.r + co.b +'BE SURE TO USE HYPHEN(-) WHEN ENETERING NAME')
+msgstr1 = f'BE SURE TO TYPE SLASH(/) AFTER EVERY INPUT' +co.e
+#time.sleep(3)
+print (msgstr1)
+print("AFTER ENTERING INPUT IF IT SHOWS BLANK OR NONE THEN USER NOT FOUND")
+name = input("Enter the first & last name | example: james-charles/: ")
+state= input("Enter State | example: ca,pa,tx/: ")
+city = input("Enter City | example: los-angeles/: ")
+URL = 'https://www.beenverified.com/people/' +name +state +city
+r = requests.get(URL, headers=hdr)
+soup = bs(r.content, features="html.parser")
+body = soup.body
+div = body.find_all('div', {'class':'search-result card'})
+for div_ in div:
+    print(co.y + "=-----------------------------------------------------------------="+ co.e)
+    time.sleep(random.randint(1,3))
+    name_content = div_.find('div', {'class': 'search-result__title'}).text
+    print (co.bl + co.b+name_content+ co.e)
+    age_content = div_.find('div', {'class': 'search-result__age age'}).text
+    #print (age_content)
+    name_content = name_content.split('|')
+    name = clear_text(name_content[0])
+    city = clear_text(name_content[1])
+    print (co.pi+city+co.e)
+    age = age_content.split(":")[1].strip()
+    print (age)
+    dl = div_.find('dl', {'class': 'search-result__list'})
+    print (co.y + co.b +dl.text+co.e)
+    dd = dl.span.find_all("dd")
 
 obj=testo()
 obj.ver()
-obj.options()
